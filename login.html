@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>로그인</title>
+</head>
+
+<body>
+
+<h2>로그인</h2>
+
+아이디<br>
+<input id="username"><br><br>
+
+비밀번호<br>
+<input id="password" type="password"><br><br>
+
+<button onclick="login()">로그인</button>
+
+<p id="result"></p>
+
+
+<script>
+
+function login(){
+
+let username =
+document.getElementById("username").value;
+
+let password =
+document.getElementById("password").value;
+
+
+// 테스트용 (나중에 Supabase 연결 가능)
+
+if(username=="kim91" && password=="910820"){
+
+
+localStorage.setItem("loginUser", username);
+
+
+window.location.href="main.html";
+
+
+}else{
+
+
+document.getElementById("result").innerHTML
+="로그인 실패";
+
+
+}
+
+}
+
+</script>
+
+
+</body>
+</html>
