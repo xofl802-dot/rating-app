@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+<meta charset="UTF-8">
+<title>로그인</title>
 </head>
 
 <body>
 
 <h2>로그인</h2>
 
-<input id="username" placeholder="아이디"><br><br>
+아이디<br>
+<input id="username"><br><br>
 
-<input id="password" type="password" placeholder="비밀번호"><br><br>
+비밀번호<br>
+<input id="password" type="password"><br><br>
 
 <button onclick="login()">로그인</button>
 
@@ -23,61 +22,36 @@
 
 <script>
 
-const SUPABASE_URL = "https://yxdmodykucipjwogzuoi.supabase.co"
-
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZG1vZHlrdWNpcGp3b2d6dW9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExNTEzNzgsImV4cCI6MjA4NjcyNzM3OH0.m5XIry8Y24HcfCsBmg3pjpcepTqVBP24XeSGBHgpBEQ"
-
-const client = supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-)
-
-
-async function login(){
+function login(){
 
 let username =
-document.getElementById("username").value.trim()
+document.getElementById("username").value;
 
 let password =
-document.getElementById("password").value.trim()
+document.getElementById("password").value;
 
 
-const { data, error } = await client
-.from("users")
-.select("*")
-.eq("username", username)
-.eq("password", password)
-.limit(1)
+// 테스트용 (나중에 Supabase 연결 가능)
+
+if(username=="kim91" && password=="910820"){
 
 
-console.log("조회결과:", data)
-
-console.log("에러:", error)
+localStorage.setItem("loginUser", username);
 
 
-if(error){
+window.location.href="main.html";
 
-document.getElementById("result").innerHTML =
-"에러: " + error.message
-
-return
-
-}
-
-
-if(data && data.length > 0){
-
-window.location.href = "main.html"
 
 }else{
 
-document.getElementById("result").innerHTML =
-"로그인 실패"
+
+document.getElementById("result").innerHTML
+="로그인 실패";
+
 
 }
 
 }
-
 
 </script>
 
