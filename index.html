@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>평가앱 로그인</title>
+
+<style>
+
+body{
+font-family:sans-serif;
+text-align:center;
+padding:30px;
+}
+
+input{
+width:80%;
+padding:15px;
+margin:10px;
+font-size:18px;
+}
+
+button{
+width:85%;
+padding:15px;
+font-size:18px;
+background-color:#007bff;
+color:white;
+border:none;
+border-radius:5px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>평가앱 로그인</h2>
+
+<input id="username" placeholder="아이디">
+
+<input id="password" type="password" placeholder="비밀번호">
+
+<button onclick="login()">로그인</button>
+
+<p id="result"></p>
+
+<script>
+
+function login(){
+
+let username =
+document.getElementById("username").value;
+
+let password =
+document.getElementById("password").value;
+
+if(username=="admin" && password=="1234"){
+
+document.getElementById("result").innerHTML
+="로그인 성공";
+
+}else{
+
+document.getElementById("result").innerHTML
+="로그인 실패";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
