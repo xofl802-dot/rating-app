@@ -10,7 +10,7 @@
 
 <body>
 
-<h2>로그인 테스트</h2>
+<h2>로그인</h2>
 
 <input id="username" placeholder="아이디"><br><br>
 
@@ -22,8 +22,6 @@
 
 
 <script>
-
-console.log("스크립트 실행됨");  // ← 실행 확인용
 
 const SUPABASE_URL = "https://yxdmodykucipjwogzuoi.supabase.co"
 
@@ -43,6 +41,7 @@ document.getElementById("username").value.trim()
 let password =
 document.getElementById("password").value.trim()
 
+
 const { data, error } = await client
 .from("users")
 .select("*")
@@ -50,8 +49,11 @@ const { data, error } = await client
 .eq("password", password)
 .limit(1)
 
+
 console.log("조회결과:", data)
+
 console.log("에러:", error)
+
 
 if(error){
 
@@ -61,6 +63,7 @@ document.getElementById("result").innerHTML =
 return
 
 }
+
 
 if(data && data.length > 0){
 
@@ -75,3 +78,10 @@ document.getElementById("result").innerHTML =
 }
 
 }
+
+
+</script>
+
+
+</body>
+</html>
