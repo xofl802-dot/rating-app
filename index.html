@@ -10,7 +10,7 @@
 
 <body>
 
-<h2>로그인</h2>
+<h2>로그인 테스트</h2>
 
 <input id="username" placeholder="아이디"><br><br>
 
@@ -22,6 +22,8 @@
 
 
 <script>
+
+console.log("스크립트 실행됨");  // ← 실행 확인용
 
 const SUPABASE_URL = "https://yxdmodykucipjwogzuoi.supabase.co"
 
@@ -35,32 +37,15 @@ SUPABASE_KEY
 
 async function login(){
 
-let username =
-document.getElementById("username").value
-
-let password =
-document.getElementById("password").value
-
-
-let { data, error } =
-await client
-.from("users")
-.select("*")
-
-
-console.log(data)
-
-
-if(data && data.length > 0){
+console.log("login 함수 실행됨");  // ← 실행 확인용
 
 document.getElementById("result").innerHTML =
-"DB 연결 성공"
-
-}else{
-
-document.getElementById("result").innerHTML =
-"DB 연결 실패"
+"버튼은 작동함"
 
 }
 
-}
+</script>
+
+
+</body>
+</html>
