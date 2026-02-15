@@ -1,16 +1,131 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<title>평가 입력</title>
 </head>
 
 <body>
 
-<h2>평가서 목록 화면</h2>
+<h2>직원 평가 입력</h2>
 
-<p>로그인 성공 후 이동 완료</p>
+평가서번호<br>
+<input id="case_number" placeholder="예: 2501-04-4550">
+
+<br><br>
+
+직원 이름<br>
+
+<select id="staff">
+
+<option value="직원1">직원1</option>
+<option value="직원2">직원2</option>
+<option value="직원3">직원3</option>
+
+</select>
+
+
+<br><br>
+
+
+점수<br>
+
+<select id="score">
+
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+
+</select>
+
+
+<br><br>
+
+
+<button onclick="save()">저장</button>
+
+
+<p id="result"></p>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+
+
+const supabase = window.supabase.createClient(
+
+"https://yxdmodykucipjwogzuoi.supabase.co",
+
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZG1vZHlrdWNpcGp3b2d6dW9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExNTEzNzgsImV4cCI6MjA4NjcyNzM3OH0.m5XIry8Y24HcfCsBmg3pjpcepTqVBP24XeSGBHgpBEQ"
+
+)
+
+
+
+async function save(){
+
+
+let case_number = document.getElementById("case_number").value
+
+let staff = document.getElementById("staff").value
+
+let score = document.getElementById("score").value
+
+
+
+if(!case_number){
+
+alert("평가서번호 입력")
+
+return
+
+}
+
+
+
+let { error } = await supabase
+
+.from("ratings")
+
+.insert([
+
+{
+
+case_number: case_number,
+
+staff: staff,
+
+score: score
+
+}
+
+])
+
+
+
+if(error){
+
+document.getElementById("result").innerText = "저장 실패"
+
+}
+
+else{
+
+document.getElementById("result").innerText = "저장 완료"
+
+}
+
+
+}
+
+
+</script>
+
 
 </body>
+
 
 </html>
