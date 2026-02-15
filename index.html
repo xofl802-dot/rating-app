@@ -37,15 +37,41 @@ SUPABASE_KEY
 
 async function login(){
 
-console.log("login 함수 실행됨");  // ← 실행 확인용
+let username =
+document.getElementById("username").value.trim()
+
+let password =
+document.getElementById("password").value.trim()
+
+const { data, error } = await client
+.from("users")
+.select("*")
+.eq("username", username)
+.eq("password", password)
+.limit(1)
+
+console.log("조회결과:", data)
+console.log("에러:", error)
+
+if(error){
 
 document.getElementById("result").innerHTML =
-"버튼은 작동함"
+"에러: " + error.message
+
+return
 
 }
 
-</script>
+if(data && data.length > 0){
 
+document.getElementById("result").innerHTML =
+"로그인 성공"
 
-</body>
-</html>
+}else{
+
+document.getElementById("result").innerHTML =
+"로그인 실패"
+
+}
+
+}
