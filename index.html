@@ -4,29 +4,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-<style>
-
-body{
-font-family:sans-serif;
-padding:20px;
-}
-
-input,button{
-width:100%;
-padding:15px;
-margin:10px 0;
-font-size:18px;
-}
-
-.case{
-border:1px solid gray;
-padding:15px;
-margin:10px 0;
-}
-
-</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
 
@@ -34,20 +12,26 @@ margin:10px 0;
 
 <h2>로그인</h2>
 
-<input id="username" placeholder="아이디">
-<input id="password" type="password" placeholder="비밀번호">
+<input id="username" placeholder="아이디"><br><br>
+
+<input id="password" type="password" placeholder="비밀번호"><br><br>
 
 <button onclick="login()">로그인</button>
 
-<div id="cases"></div>
+<p id="result"></p>
+
 
 <script>
 
-const supabase =
-supabase.createClient(
-"https://yxdmodykucipjwogzuoi.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZG1vZHlrdWNpcGp3b2d6dW9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExNTEzNzgsImV4cCI6MjA4NjcyNzM3OH0.m5XIry8Y24HcfCsBmg3pjpcepTqVBP24XeSGBHgpBEQ"
+// ✅ 여기에 당신 값 넣기
+const SUPABASE_URL = "https://yxdmodykucipjwogzuoi.supabase.co"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZG1vZHlrdWNpcGp3b2d6dW9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExNTEzNzgsImV4cCI6MjA4NjcyNzM3OH0.m5XIry8Y24HcfCsBmg3pjpcepTqVBP24XeSGBHgpBEQ"
+
+const client = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
 )
+
 
 async function login(){
 
@@ -58,119 +42,40 @@ let password =
 document.getElementById("password").value
 
 
-let { data } =
-await supabase
+let { data, error } =
+await client
 .from("users")
 .select("*")
-.eq("username",username)
-.eq("password",password)
+.eq("username", username)
+.eq("password", password)
 
 
-if(data.length==1){
+if(error){
 
-loadCases(username)
+document.getElementById("result").innerHTML =
+"에러: " + error.message
+
+return
+
+}
+
+
+if(data.length > 0){
+
+document.getElementById("result").innerHTML =
+"로그인 성공"
 
 }else{
 
-alert("로그인 실패")
+document.getElementById("result").innerHTML =
+"로그인 실패"
 
 }
-
-}
-
-
-async function loadCases(username){
-
-document.body.innerHTML="<h2>평가건 목록</h2>"
-
-
-let { data } =
-await supabase
-.from("cases")
-.select("*")
-.eq("appraiser_name",username)
-
-
-data.forEach(caseItem=>{
-
-document.body.innerHTML+=`
-
-<div class="case">
-
-${caseItem.case_number}<br>
-
-${caseItem.property}<br>
-
-<button onclick="evaluate('${caseItem.case_number}')">
-평가하기
-</button>
-
-</div>
-
-`
-
-})
-
-}
-
-
-function evaluate(caseNumber){
-
-document.body.innerHTML=`
-
-<h2>${caseNumber} 평가</h2>
-
-<input id="accuracy" placeholder="정확성 1~5">
-
-<input id="speed" placeholder="속도 1~5">
-
-<input id="cooperation" placeholder="협조도 1~5">
-
-<input id="quality" placeholder="문서품질 1~5">
-
-<input id="etc" placeholder="기타 1~5">
-
-<button onclick="save('${caseNumber}')">
-저장
-</button>
-
-`
-
-}
-
-
-async function save(caseNumber){
-
-await supabase
-.from("evaluations")
-.insert({
-
-case_number:caseNumber,
-
-accuracy:
-document.getElementById("accuracy").value,
-
-speed:
-document.getElementById("speed").value,
-
-cooperation:
-document.getElementById("cooperation").value,
-
-quality:
-document.getElementById("quality").value,
-
-etc:
-document.getElementById("etc").value
-
-})
-
-alert("저장 완료")
-
-location.reload()
 
 }
 
 </script>
+
 
 </body>
 </html>
