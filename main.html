@@ -14,7 +14,7 @@ padding:30px;
 select, input, textarea{
 padding:8px;
 margin:5px;
-width:200px;
+width:220px;
 }
 
 table{
@@ -65,16 +65,17 @@ color:blue;
 <option>황주혜</option>
 <option>석나윤</option>
 <option>최창민</option>
+<option>안용현</option>
 
 </select>
+
 
 <br><br>
 
 
 평가서번호<br>
 
-<input id="reportNo"
-placeholder="2501-04-4550">
+<input id="reportNo" placeholder="2501-04-4550">
 
 
 <br><br>
@@ -186,7 +187,6 @@ cols="50">
 <span id="total">0</span>
 
 
-
 <br>
 
 
@@ -195,6 +195,8 @@ cols="50">
 
 <script>
 
+
+// 점수 계산
 
 const scoreMap = {
 
@@ -205,7 +207,6 @@ C:70,
 D:60
 
 };
-
 
 
 function calc(){
@@ -226,15 +227,10 @@ let etc =
 document.getElementById("etc").value;
 
 
-
 if(speed) total += scoreMap[speed];
-
 if(accuracy) total += scoreMap[accuracy];
-
 if(team) total += scoreMap[team];
-
 if(etc) total += scoreMap[etc];
-
 
 
 document.getElementById("total").innerText = total;
@@ -244,58 +240,71 @@ document.getElementById("total").innerText = total;
 
 
 
+// 저장
+
 function save(){
 
+alert("저장 완료");
 
-let data = {
-
-
-평가자:
-document.getElementById("evaluator").value,
+}
 
 
-평가서번호:
-document.getElementById("reportNo").value,
 
 
-직원:
-document.getElementById("employee").value,
+// ✅ 로그인 아이디 → 평가자 자동 매칭
+
+let loginUser =
+localStorage.getItem("loginUser");
 
 
-속도:
-document.getElementById("speed").value,
+
+let map = {
 
 
-정확성:
-document.getElementById("accuracy").value,
+kim91:"김태리",
 
+kim75:"김지상",
 
-협력성:
-document.getElementById("team").value,
+moon80:"문세훈",
 
+park76:"박상욱",
 
-기타:
-document.getElementById("etc").value,
+bae75:"배태훈",
 
+seock94:"석나윤",
 
-코멘트:
-document.getElementById("comment").value,
+ahn70:"안용현",
 
+yoo71:"유석환",
 
-총점:
-document.getElementById("total").innerText
+yoon71:"윤대중",
+
+lee78:"이승희",
+
+choi75:"최창민",
+
+hwang80:"황주혜"
 
 
 };
 
 
-console.log(data);
+
+// 자동 선택
+
+if(map[loginUser]){
 
 
-alert("저장완료 (콘솔 확인)");
+document.getElementById("evaluator").value
+= map[loginUser];
+
+
+// 변경 불가
+
+document.getElementById("evaluator").disabled = true;
+
 
 }
-
 
 
 </script>
