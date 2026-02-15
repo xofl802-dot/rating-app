@@ -2,47 +2,43 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>감정평가부 직원 평가 시스템</title>
+<title>감정평가부 직원 평가</title>
 
 <style>
 
 body{
-    font-family: 맑은고딕;
-    padding:20px;
+font-family:맑은고딕;
+padding:20px;
 }
 
 table{
-    border-collapse: collapse;
-    width:100%;
+border-collapse:collapse;
+width:100%;
 }
 
 th, td{
-    border:1px solid #ccc;
-    padding:8px;
-    text-align:center;
+border:1px solid #ccc;
+padding:8px;
+text-align:center;
 }
 
 th{
-    background:#f2f2f2;
+background:#f2f2f2;
 }
 
-input[type=number]{
-    width:60px;
-}
-
-input[type=text]{
-    width:200px;
+select, input{
+padding:5px;
 }
 
 textarea{
-    width:300px;
-    height:60px;
+width:200px;
+height:50px;
 }
 
 button{
-    padding:10px;
-    margin-top:10px;
-    font-size:16px;
+padding:10px;
+margin-top:10px;
+font-size:16px;
 }
 
 </style>
@@ -52,19 +48,38 @@ button{
 
 <h2>감정평가부 직원 평가</h2>
 
-평가자 이름:
-<input type="text" id="evaluator">
+평가자:
+
+<select id="evaluator">
+
+<option value="">선택</option>
+
+<option>김경호</option>
+<option>김진영</option>
+<option>신의정</option>
+<option>최재은</option>
+<option>박현수</option>
+<option>윤정균</option>
+<option>박소미</option>
+<option>박태용</option>
+<option>박창범</option>
+<option>한우진</option>
+
+</select>
 
 <br><br>
 
 평가서번호:
-<input type="text" id="reportNo" placeholder="예: 2501-04-4550">
+
+<input type="text" id="reportNo"
+placeholder="2501-04-4550">
 
 <br><br>
 
 <table>
 
 <tr>
+
 <th>직원명</th>
 <th>속도</th>
 <th>정확성</th>
@@ -72,11 +87,13 @@ button{
 <th>기타</th>
 <th>코멘트</th>
 <th>총점</th>
+
 </tr>
 
 <script>
 
 const 직원목록 = [
+
 "김경호",
 "김진영",
 "신의정",
@@ -87,45 +104,72 @@ const 직원목록 = [
 "박태용",
 "박창범",
 "한우진"
+
 ];
 
-직원목록.forEach((name, index)=>{
+const 점수값 = {
+
+"S":100,
+"A":90,
+"B":80,
+"C":70,
+"D":60
+
+};
+
+function 점수선택(id){
+
+return `
+
+<select id="${id}" onchange="calc('${id}')">
+
+<option value="">선택</option>
+
+<option value="S">S</option>
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+<option value="D">D</option>
+
+</select>
+
+`;
+
+}
+
+직원목록.forEach((name,i)=>{
 
 document.write(`
 
 <tr>
 
-<td>${name}</td>
-
 <td>
-<input type="number" min="0" max="25"
-onchange="calc(${index})"
-id="speed${index}">
+
+<select id="employee${i}">
+
+<option value="">선택</option>
+
+${직원목록.map(n=>`<option>${n}</option>`).join("")}
+
+</select>
+
 </td>
 
-<td>
-<input type="number" min="0" max="25"
-onchange="calc(${index})"
-id="accuracy${index}">
-</td>
+<td>${점수선택("speed"+i)}</td>
+
+<td>${점수선택("accuracy"+i)}</td>
+
+<td>${점수선택("team"+i)}</td>
+
+<td>${점수선택("etc"+i)}</td>
 
 <td>
-<input type="number" min="0" max="25"
-onchange="calc(${index})"
-id="team${index}">
+
+<textarea id="comment${i}"></textarea>
+
 </td>
 
-<td>
-<input type="number" min="0" max="25"
-onchange="calc(${index})"
-id="etc${index}">
-</td>
-
-<td>
-<textarea id="comment${index}"></textarea>
-</td>
-
-<td id="total${index}">0</td>
+<td id="total${i}">0</td>
 
 </tr>
 
@@ -133,47 +177,51 @@ id="etc${index}">
 
 });
 
-function calc(i){
+function calc(){
 
-let speed =
-Number(document.getElementById("speed"+i).value);
+직원목록.forEach((_,i)=>{
 
-let accuracy =
-Number(document.getElementById("accuracy"+i).value);
+let total=0;
 
-let team =
-Number(document.getElementById("team"+i).value);
+let speed=
+document.getElementById("speed"+i).value;
 
-let etc =
-Number(document.getElementById("etc"+i).value);
+let accuracy=
+document.getElementById("accuracy"+i).value;
 
-let total =
-speed + accuracy + team + etc;
+let team=
+document.getElementById("team"+i).value;
 
-document.getElementById("total"+i).innerText
-= total;
+let etc=
+document.getElementById("etc"+i).value;
+
+if(speed) total+=점수값[speed];
+if(accuracy) total+=점수값[accuracy];
+if(team) total+=점수값[team];
+if(etc) total+=점수값[etc];
+
+document.getElementById("total"+i).innerText=total;
+
+});
 
 }
 
 function save(){
 
-let evaluator =
-document.getElementById("evaluator").value;
+let data=[];
 
-let reportNo =
-document.getElementById("reportNo").value;
-
-let data = [];
-
-직원목록.forEach((name,i)=>{
+직원목록.forEach((_,i)=>{
 
 data.push({
 
-평가자: evaluator,
+평가자:
+document.getElementById("evaluator").value,
 
-평가서번호: reportNo,
+평가서번호:
+document.getElementById("reportNo").value,
 
-직원명: name,
+직원명:
+document.getElementById("employee"+i).value,
 
 속도:
 document.getElementById("speed"+i).value,
