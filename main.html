@@ -2,43 +2,42 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>감정평가부 직원 평가</title>
+<title>직원 평가</title>
 
 <style>
 
 body{
 font-family:맑은고딕;
-padding:20px;
+padding:30px;
+}
+
+select, input, textarea{
+padding:8px;
+margin:5px;
+width:200px;
 }
 
 table{
 border-collapse:collapse;
-width:100%;
+margin-top:20px;
 }
 
 th, td{
 border:1px solid #ccc;
-padding:8px;
+padding:10px;
 text-align:center;
-}
-
-th{
-background:#f2f2f2;
-}
-
-select, input{
-padding:5px;
-}
-
-textarea{
-width:200px;
-height:50px;
 }
 
 button{
 padding:10px;
-margin-top:10px;
 font-size:16px;
+margin-top:20px;
+}
+
+#total{
+font-size:20px;
+font-weight:bold;
+color:blue;
 }
 
 </style>
@@ -46,11 +45,44 @@ font-size:16px;
 </head>
 <body>
 
-<h2>감정평가부 직원 평가</h2>
+<h2>직원 평가</h2>
 
-평가자:
+
+평가자<br>
 
 <select id="evaluator">
+
+<option value="">선택</option>
+
+<option>박상욱</option>
+<option>윤대중</option>
+<option>김태리</option>
+<option>김지상</option>
+<option>문세훈</option>
+<option>배태훈</option>
+<option>이승희</option>
+<option>유석환</option>
+<option>황주혜</option>
+<option>석나윤</option>
+<option>최창민</option>
+
+</select>
+
+<br><br>
+
+
+평가서번호<br>
+
+<input id="reportNo"
+placeholder="2501-04-4550">
+
+
+<br><br>
+
+
+직원명<br>
+
+<select id="employee">
 
 <option value="">선택</option>
 
@@ -67,195 +99,207 @@ font-size:16px;
 
 </select>
 
-<br><br>
-
-평가서번호:
-
-<input type="text" id="reportNo"
-placeholder="2501-04-4550">
-
-<br><br>
 
 <table>
 
 <tr>
 
-<th>직원명</th>
 <th>속도</th>
 <th>정확성</th>
 <th>협력성</th>
 <th>기타</th>
-<th>코멘트</th>
-<th>총점</th>
 
 </tr>
 
-<script>
-
-const 직원목록 = [
-
-"김경호",
-"김진영",
-"신의정",
-"최재은",
-"박현수",
-"윤정균",
-"박소미",
-"박태용",
-"박창범",
-"한우진"
-
-];
-
-const 점수값 = {
-
-"S":100,
-"A":90,
-"B":80,
-"C":70,
-"D":60
-
-};
-
-function 점수선택(id){
-
-return `
-
-<select id="${id}" onchange="calc('${id}')">
-
-<option value="">선택</option>
-
-<option value="S">S</option>
-<option value="A">A</option>
-<option value="B">B</option>
-<option value="C">C</option>
-<option value="D">D</option>
-
-</select>
-
-`;
-
-}
-
-직원목록.forEach((name,i)=>{
-
-document.write(`
 
 <tr>
 
 <td>
-
-<select id="employee${i}">
-
+<select id="speed" onchange="calc()">
 <option value="">선택</option>
-
-${직원목록.map(n=>`<option>${n}</option>`).join("")}
-
+<option>S</option>
+<option>A</option>
+<option>B</option>
+<option>C</option>
+<option>D</option>
 </select>
-
 </td>
 
-<td>${점수선택("speed"+i)}</td>
-
-<td>${점수선택("accuracy"+i)}</td>
-
-<td>${점수선택("team"+i)}</td>
-
-<td>${점수선택("etc"+i)}</td>
 
 <td>
-
-<textarea id="comment${i}"></textarea>
-
+<select id="accuracy" onchange="calc()">
+<option value="">선택</option>
+<option>S</option>
+<option>A</option>
+<option>B</option>
+<option>C</option>
+<option>D</option>
+</select>
 </td>
 
-<td id="total${i}">0</td>
+
+<td>
+<select id="team" onchange="calc()">
+<option value="">선택</option>
+<option>S</option>
+<option>A</option>
+<option>B</option>
+<option>C</option>
+<option>D</option>
+</select>
+</td>
+
+
+<td>
+<select id="etc" onchange="calc()">
+<option value="">선택</option>
+<option>S</option>
+<option>A</option>
+<option>B</option>
+<option>C</option>
+<option>D</option>
+</select>
+</td>
+
 
 </tr>
 
-`);
+</table>
 
-});
+
+<br>
+
+
+코멘트<br>
+
+<textarea id="comment"
+rows="4"
+cols="50">
+</textarea>
+
+
+<br><br>
+
+
+총점:
+
+<span id="total">0</span>
+
+
+
+<br>
+
+
+<button onclick="save()">저장</button>
+
+
+<script>
+
+
+const scoreMap = {
+
+S:100,
+A:90,
+B:80,
+C:70,
+D:60
+
+};
+
+
 
 function calc(){
 
-직원목록.forEach((_,i)=>{
+let total = 0;
 
-let total=0;
 
-let speed=
-document.getElementById("speed"+i).value;
+let speed =
+document.getElementById("speed").value;
 
-let accuracy=
-document.getElementById("accuracy"+i).value;
+let accuracy =
+document.getElementById("accuracy").value;
 
-let team=
-document.getElementById("team"+i).value;
+let team =
+document.getElementById("team").value;
 
-let etc=
-document.getElementById("etc"+i).value;
+let etc =
+document.getElementById("etc").value;
 
-if(speed) total+=점수값[speed];
-if(accuracy) total+=점수값[accuracy];
-if(team) total+=점수값[team];
-if(etc) total+=점수값[etc];
 
-document.getElementById("total"+i).innerText=total;
 
-});
+if(speed) total += scoreMap[speed];
+
+if(accuracy) total += scoreMap[accuracy];
+
+if(team) total += scoreMap[team];
+
+if(etc) total += scoreMap[etc];
+
+
+
+document.getElementById("total").innerText = total;
 
 }
 
+
+
+
 function save(){
 
-let data=[];
 
-직원목록.forEach((_,i)=>{
+let data = {
 
-data.push({
 
 평가자:
 document.getElementById("evaluator").value,
 
+
 평가서번호:
 document.getElementById("reportNo").value,
 
-직원명:
-document.getElementById("employee"+i).value,
+
+직원:
+document.getElementById("employee").value,
+
 
 속도:
-document.getElementById("speed"+i).value,
+document.getElementById("speed").value,
+
 
 정확성:
-document.getElementById("accuracy"+i).value,
+document.getElementById("accuracy").value,
+
 
 협력성:
-document.getElementById("team"+i).value,
+document.getElementById("team").value,
+
 
 기타:
-document.getElementById("etc"+i).value,
+document.getElementById("etc").value,
+
 
 코멘트:
-document.getElementById("comment"+i).value,
+document.getElementById("comment").value,
+
 
 총점:
-document.getElementById("total"+i).innerText
+document.getElementById("total").innerText
 
-});
 
-});
+};
+
 
 console.log(data);
 
-alert("저장완료 (콘솔확인)");
+
+alert("저장완료 (콘솔 확인)");
 
 }
 
+
+
 </script>
 
-</table>
-
-<button onclick="save()">저장</button>
 
 </body>
 </html>
